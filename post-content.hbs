@@ -1,0 +1,122 @@
+<article class="post-full {{post_class}} {{#unless feature_image}}no-image{{/unless}}">
+
+  <div class="post-content">
+
+    <h1 class="lh1 font-heading mb1">{{title}}</h1>
+
+    <div class="fsmedium">
+      {{^has visibility="public"}}
+        <span class="icon-lock vis-{{visibility}} paidmember-{{@member.paid}}" title="This is a {{visibility}} post">{{>"icons/lock" size=20}}</span>
+        <span class="icon-unlock vis-{{visibility}} paidmember-{{@member.paid}}" title="This is a {{visibility}} post">{{>"icons/unlock" size=20}}</span>
+        &bull;
+      {{/has}}
+
+      {{#if show_tag}}
+        {{#if primary_tag}}
+          {{#primary_tag}}
+          <a href="{{url}}" class="font-heading">{{name}}</a>
+          {{/primary_tag}}
+          &bull; 
+        {{/if}}
+      {{/if}}
+
+      {{#if show_authors}}
+        {{authors}} &bull;
+      {{/if}} 
+
+      <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
+
+      &bull; {{reading_time}}
+    </div>
+
+    {{#if show_excerpt}}
+      {{#if custom_excerpt}}
+      <h2 class="fslarge normal">{{custom_excerpt}}</h2>
+      {{/if}}
+    {{/if}}
+
+  </div>
+
+  {{#if access}}
+    {{#if feature_image}}
+    <header>
+      <figure class="post-full-image">
+        <img
+            srcset="{{img_url feature_image size="s"}} 300w,
+                    {{img_url feature_image size="m"}} 600w,
+                    {{img_url feature_image size="l"}} 1000w,
+                    {{img_url feature_image size="xl"}} 2000w"
+            sizes="(max-width: 800px) 400px,
+                (max-width: 1170px) 1170px,
+                    2000px"
+            src="{{img_url feature_image size="xl"}}"
+            alt="{{title}}"
+        />
+      </figure>
+    </header>
+    {{/if}}
+  {{/if}}
+
+  <div class="post-content">
+    {{content}}
+
+    {{^if access}}
+    <div class="box mt4 tc">
+      {{#has visibility="members"}}
+        {{>"icons/lock" size=20}}<br>
+        This is a members-only post.<br>
+        <a href="/membership/">Discover membership</a>
+      {{/has}}
+      {{#has visibility="paid"}}
+        {{>"icons/lock" size=20}}<br>
+        This a members-only post.<br>
+        {{#if @member}}
+          <a href="/membership/">Discover membership</a>
+        {{else}}
+          <a href="/subscribe/">Become a member</a>
+        {{/if}}
+      {{/has}}
+    </div>
+    {{/if}}
+
+    <div class="mt4 post-arrows">
+      <div class="post-nav">
+      {{#next_post}}
+        <a href="{{url}}">&larr; {{title}}</a>
+      {{/next_post}}
+      </div>
+      <div class="post-nav tr">
+      {{#prev_post}}
+        <a href="{{url}}">{{title}} &rarr;</a>
+      {{/prev_post}}
+      </div>
+    </div>
+
+    {{^if @member}}
+    <div class="box mt4 tc">
+      <h2 style="margin-top:0">subscribe to {{@site.title}}</h2>
+      <p>articles, interviews and other tidbits to help you on your journey…</p>
+      {{> 'subscribe-form'}}
+    </div>
+    {{/if}}
+
+    {{!-- {{> comments}} --}}
+  </div>
+
+</article>
+
+
+{{#contentFor "scripts"}}
+  <script>
+  // Gallery layout
+  var images = document.querySelectorAll('.kg-gallery-image img');
+  images.forEach(function (image) {
+      var container = image.closest('.kg-gallery-image');
+      var width = image.attributes.width.value;
+      var height = image.attributes.height.value;
+      var ratio = width / height;
+      container.style.flex = ratio + ' 1 0%';
+  })
+  </script>
+{{/contentFor}}
+    
